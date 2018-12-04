@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
-import {PageHeader, ButtonToolbar, Button} from 'react-bootstrap';
+import {FormGroup, Form, FormControl, ControlLabel, PageHeader, ButtonToolbar, Button} from 'react-bootstrap';
 
 class App extends Component {
 
   constructor() {
     super();
     this.state = {
-      isAddingMeal: false,
+      isAddingMeal: false
+    };
+    this.props = {
+      protein: 0,
+      fat: 0,
+      carbs: 0
     };
   }
 
@@ -17,8 +22,10 @@ class App extends Component {
     });
   }
 
-  addMeal() {
-
+  updateMacros() {
+    this.setState({
+      protein: 69
+    });
   }
 
   render() {
@@ -36,26 +43,38 @@ class App extends Component {
           <PageHeader>
             Daily Counts
           </PageHeader>
-          <h2> Protein: </h2>
-          <h2> Fat: </h2>
+          <h2> Protein: { this.props.protein } </h2>
           <h2> Carbohydrates: </h2>
+          <h2> Fat: </h2>
           <h2> Calories: </h2>
           <h2> BMR: </h2>
           <ButtonToolbar>
-            <Button bsStyle="success" onClick={this.toggleAddMeal.bind(this)}>Add Meal</Button>
+            <div style = {hidden}>
+              <Button bsStyle="success" onClick={this.toggleAddMeal.bind(this)}>Add Meal</Button>
+            </div>
+            <div style = {shown}>
+              <Button bsStyle="danger" onClick={this.toggleAddMeal.bind(this)}>Cancel</Button>
+            </div>
           </ButtonToolbar>
           <div>
-            <h2 style={ shown }>this.state.shown = true</h2>
-             
-          </div>
-
-          <form>
-            <label>
-              Name:  
-              <input type="text" name="name" />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
+            <form style={ shown }>
+              <Form>
+                <FormGroup controlId="formInlineName">
+                  <ControlLabel>Protein</ControlLabel>{' '}
+                  <FormControl type="text" placeholder="69" />
+                </FormGroup>{' '}
+                <FormGroup controlId="formInlineEmail">
+                  <ControlLabel>Carbohydrates</ControlLabel>{' '}
+                  <FormControl type="text" placeholder="420" />
+                </FormGroup>{' '}
+                <FormGroup controlId="formInlineEmail">
+                  <ControlLabel>Fat</ControlLabel>{' '}
+                  <FormControl type="text" placeholder="42069" />
+                </FormGroup>{' '}
+                <Button onClick={this.updateMacros.bind(this)}>Submit</Button>
+              </Form>
+            </form>
+          </div>          
         </header>
       </div>
     );
