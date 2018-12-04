@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import { Header } from './Header.js'
 import {FormGroup, Form, FormControl, ControlLabel, PageHeader, ButtonToolbar, Button} from 'react-bootstrap';
 
 class App extends Component {
@@ -37,17 +38,17 @@ class App extends Component {
       display: this.state.isAddingMeal ? "none" : "block"
     }
 
+    var userData = {
+      calories: 0,
+      fats: 0,
+      protein: 0,
+      carbs: 0
+    }
+
     return (
       <div className="App">
         <header className="App-header">
-          <PageHeader>
-            Daily Counts
-          </PageHeader>
-          <h2> Protein: { this.props.protein } </h2>
-          <h2> Carbohydrates: </h2>
-          <h2> Fat: </h2>
-          <h2> Calories: </h2>
-          <h2> BMR: </h2>
+          <Header userData={userData}/>
           <ButtonToolbar>
             <div style = {hidden}>
               <Button bsStyle="success" onClick={this.toggleAddMeal.bind(this)}>Add Meal</Button>
