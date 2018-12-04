@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
-import {PageHeader, ButtonToolbar, Button} from 'react-bootstrap';
+import { Header } from './Header.js'
+import {Radio, FormGroup, Form, FormControl, ControlLabel, PageHeader, ButtonToolbar, Button} from 'react-bootstrap';
 
 class App extends Component {
 
   constructor() {
     super();
     this.state = {
-      isAddingMeal: false,
+      calories: 0,
+      height: 0,
+      weight: 0,
+      age: 0,
+      sex: false
     };
   }
 
@@ -17,8 +22,38 @@ class App extends Component {
     });
   }
 
-  addMeal() {
+  calculateBMR() {
+    let bmr =  (4.54 * this.state.weight) + (15.875 * this.state.height) - (5 * this.state.age);
+    console.log(this.state);
+    return this.state.sex ? bmr - 161 : bmr + 5
+  }
 
+  handleHeightChange(e) {
+    this.setState({
+      height: e.target.value,
+      calories: this.calculateBMR()
+    })
+  }
+
+  handleWeightChange(e) {
+    this.setState({
+      weight: e.target.value,
+      calories: this.calculateBMR()
+    })
+  }
+
+  handleAgeChange(e) {
+    this.setState({
+      age: e.target.value,
+      calories: this.calculateBMR()
+    })
+  }
+
+  handleSexChange(e) {
+    this.setState({
+      sex: !this.state.sex,
+      calories: this.calculateBMR()
+    })
   }
 
   render() {
@@ -30,32 +65,41 @@ class App extends Component {
       display: this.state.isAddingMeal ? "none" : "block"
     }
 
+    var userData = {
+      calories: this.state.calories.toFixed(0),
+      fats: ((this.state.calories * .25) / 4).toFixed(0),
+      protein: ((this.state.calories * .15) / 9).toFixed(0),
+      carbohydrates: ((this.state.calories * .6) / 4).toFixed(0)
+    }
+
     return (
       <div className="App">
         <header className="App-header">
-          <PageHeader>
-            Daily Counts
-          </PageHeader>
-          <h2> Protein: </h2>
-          <h2> Fat: </h2>
-          <h2> Carbohydrates: </h2>
-          <h2> Calories: </h2>
-          <h2> BMR: </h2>
-          <ButtonToolbar>
-            <Button bsStyle="success" onClick={this.toggleAddMeal.bind(this)}>Add Meal</Button>
-          </ButtonToolbar>
+          <Header userData={userData}/>          
           <div>
-            <h2 style={ shown }>this.state.shown = true</h2>
-             
-          </div>
-
-          <form>
-            <label>
-              Name:  
-              <input type="text" name="name" />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
+            <Form>
+              <FormGroup controlId="formInlineName">
+                <ControlLabel>Height</ControlLabel>{' '}
+                <FormControl type="text" pattern="[0-9]*" value={ this.state.height } onChange = { this.handleHeightChange.bind(this) }/>
+              </FormGroup>{' '}
+              <FormGroup controlId="formInlineName">
+                <ControlLabel>Weight</ControlLabel>{' '}
+                <FormControl type="text" pattern="[0-9]*" value={ this.state.weight } onChange = { this.handleWeightChange.bind(this) }/>
+              </FormGroup>{' '}
+              <FormGroup controlId="formInlineName">
+                <ControlLabel>Age</ControlLabel>{' '}
+                <FormControl type="text" pattern="[0-9]*" value={ this.state.age } onChange = { this.handleAgeChange.bind(this) }/>
+              </FormGroup>{' '}
+              <FormGroup>
+                <Radio value={ this.state.sex } onChange = { this.handleSexChange.bind(this) } name="radioGroup" inline>
+                  Male
+                </Radio>{' '}
+                <Radio value={ this.state.sex } onChange = { this.handleSexChange.bind(this) } name="radioGroup" inline>
+                  Female
+                </Radio>{' '}                              
+              </FormGroup>
+            </Form>
+          </div>          
         </header>
       </div>
     );
